@@ -5,7 +5,6 @@
     { "src": "index.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/google.*\\.html", "dest": "/:0" },
     { "src": "/api/(.*)", "dest": "index.js" },
     { "src": "/uploads/(.*)", "dest": "index.js" },
     { "src": "/(.*)", "dest": "index.js" }
