@@ -58,25 +58,77 @@
       <div class="grid" id="productsGrid"></div>
     </section>
 
+    <!-- 📢 قسم المنشورات والتقييمات -->
+    <section class="posts-section" id="postsSection">
+      <h2>📢 المنشورات وتقييمات العملاء</h2>
+      <div class="posts-toolbar">
+        <button class="btn secondary" id="toggleCreatePost">✏️ إضافة منشور جديد</button>
+      </div>
+      <div id="createPostCard" class="card post-create-card" hidden>
+        <input id="postTitle" placeholder="عنوان المنشور" maxlength="100">
+        <textarea id="postContent" placeholder="اكتب محتوى المنشور..." rows="4" maxlength="500"></textarea>
+        <button class="btn" id="btnCreatePost">نشر المنشور</button>
+      </div>
+      <div class="grid" id="postsGrid"></div>
+    </section>
+
     <!-- 🛠️ لوحة الأدمن (تظهر فقط عند دخول الأدمن) -->
     <section class="admin-section" id="adminSection" hidden>
-      <h2>🛠️ لوحة الأدمن — نشر المنتجات</h2>
-      <form id="addProductForm" class="admin-form card">
-        <input id="pName" placeholder="اسم المنتج" required>
-        <input id="pPrice" type="number" min="0" step="any" placeholder="السعر" required>
-        <input id="pDesc" placeholder="وصف قصير للمنتج">
-        <div class="img-row">
-          <input id="pEmoji" placeholder="إيموجي مثل 🚀 (بدون صورة)">
-          <label class="file-label">📷 اختر صورة للمنتج
-            <input id="pImage" type="file" accept="image/*" hidden>
-          </label>
-        </div>
-        <img id="imgPreview" class="img-preview" alt="معاينة الصورة" hidden>
-        <button type="submit" class="btn">➕ نشر المنتج في المتجر</button>
-        <p class="save-note">💾 المنتجات والحسابات تُحفظ تلقائياً في Firebase (السحابة)</p>
-      </form>
-      <h3>📦 المنتجات المنشورة</h3>
-      <div id="adminList" class="admin-list"></div>
+      <h2>🛠️ لوحة الأدمن — إدارة المتجر</h2>
+
+      <!-- تبويبات الأدمن -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="products">📦 المنتجات</button>
+        <button class="admin-tab" data-tab="bans">🚫 بن مستخدم</button>
+        <button class="admin-tab" data-tab="banned">⛔ المحظورون</button>
+        <button class="admin-tab" data-tab="posts">📢 المنشورات</button>
+      </div>
+
+      <!-- المنتجات -->
+      <div class="admin-tab-content active" id="tab-products">
+        <form id="addProductForm" class="admin-form card">
+          <input id="pName" placeholder="اسم المنتج" required>
+          <input id="pPrice" type="number" min="0" step="any" placeholder="السعر" required>
+          <input id="pDesc" placeholder="وصف قصير للمنتج">
+          <div class="img-row">
+            <input id="pEmoji" placeholder="إيموجي مثل 🚀 (بدون صورة)">
+            <label class="file-label">📷 اختر صورة للمنتج
+              <input id="pImage" type="file" accept="image/*" hidden>
+            </label>
+          </div>
+          <img id="imgPreview" class="img-preview" alt="معاينة الصورة" hidden>
+          <button type="submit" class="btn">➕ نشر المنتج في المتجر</button>
+          <p class="save-note">💾 البيانات تُحفظ في Firebase (السحابة)</p>
+        </form>
+        <h3>📦 المنتجات المنشورة</h3>
+        <div id="adminList" class="admin-list"></div>
+      </div>
+
+      <!-- بن مستخدم -->
+      <div class="admin-tab-content" id="tab-bans">
+        <form id="banForm" class="admin-form card">
+          <h3>🚫 بن مستخدم جديد</h3>
+          <input id="banUser" placeholder="اسم المستخدم أو البريد الإلكتروني" required>
+          <textarea id="banReason" placeholder="السبب (إجباري - اكتب لماذا يتم بن هذا المستخدم)" rows="3" required></textarea>
+          <button type="submit" class="btn danger">⛔ تنفيذ البن</button>
+          <p class="save-note">⚠️ لا يمكن بن أدمن آخر، ويجب كتابة السبب.</p>
+        </form>
+        <div id="banResult" class="msg"></div>
+      </div>
+
+      <!-- قائمة المحظورين وإلغاء بن -->
+      <div class="admin-tab-content" id="tab-banned">
+        <h3>⛔ قائمة المستخدمين المحظورين</h3>
+        <div id="bannedList" class="admin-list"></div>
+        <p class="save-note">اضغط "إلغاء بن" لإعادته للمتجر.</p>
+      </div>
+
+      <!-- إدارة المنشورات -->
+      <div class="admin-tab-content" id="tab-posts">
+        <h3>📢 إدارة المنشورات</h3>
+        <div id="adminPostsList" class="admin-list"></div>
+      </div>
+
     </section>
 
     <footer>
@@ -95,23 +147,31 @@
       </div>
 
       <form id="loginForm">
-        <input id="loginUser" placeholder="اسم المستخدم" required>
+        <input id="loginUser" placeholder="اسم المستخدم أو البريد الإلكتروني" required>
         <input id="loginPass" type="password" placeholder="كلمة السر" required>
-        <button class="btn" type="submit">دخول</button>
+        <div class="auth-divider">أو استمر مع</div>
+        <button type="button" class="btn google-btn" id="btnGoogleLogin">
+          🔑 تسجيل الدخول بجيميل (Google)
+        </button>
+        <p class="auth-msg" id="loginMsg"></p>
       </form>
 
       <form id="regForm" hidden>
-        <input id="regUser" placeholder="اسم المستخدم" required>
-        <input id="regPass" type="password" placeholder="كلمة السر (4 أحرف على الأقل)" required>
+        <input id="regUser" placeholder="اسم المستخدم (حروف إنجليزية وأرقام فقط)" required>
+        <input id="regEmail" placeholder="البريد الإلكتروني (Gmail)" required>
+        <input id="regPass" type="password" placeholder="كلمة السر (6 أحرف على الأقل)" required>
         <input id="regPass2" type="password" placeholder="أعد كتابة كلمة السر" required>
-        <button class="btn" type="submit">إنشاء الحساب</button>
+        <div class="auth-divider">أو يستمر مع</div>
+        <button type="button" class="btn google-btn" id="btnGoogleRegister">
+          🔑 إنشاء حساب بجيميل (Google)
+        </button>
+        <p class="auth-msg" id="regMsg"></p>
       </form>
 
-      <p id="authMsg" class="auth-msg"></p>
     </div>
   </div>
 
-  <!-- 🔥 مكتبات Firebase (تعمل فقط عند إضافة بيانات مشروعك في script.js) -->
+  <!-- 🔥 مكتبات Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
